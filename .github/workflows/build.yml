@@ -1,0 +1,23 @@
+name: Build and Push to Aliyun
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Login to Aliyun Registry
+        run: |
+          docker login crpi-yuf6g65ypkcpj5rk.cn-shenzhen.personal.cr.aliyuncs.com \
+            -u ${{ secrets.ALIYUN_USERNAME }} \
+            -p ${{ secrets.ALIYUN_PASSWORD }}
+      
+      - name: Build and Push
+        run: |
+          docker build -t crpi-yuf6g65ypkcpj5rk.cn-shenzhen.personal.cr.aliyuncs.com/hjp_name/openclaw:latest .
+          docker push crpi-yuf6g65ypkcpj5rk.cn-shenzhen.personal.cr.aliyuncs.com/hjp_name/openclaw:latest
